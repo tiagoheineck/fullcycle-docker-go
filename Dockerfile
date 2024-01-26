@@ -4,10 +4,10 @@ WORKDIR /go/src/app
 
 COPY . .
 
-RUN go build -o /go/bin/app main.go
+RUN go build -ldflags "-w -s" -gcflags=all=-l  -gcflags=all=-B  -gcflags=all=-wb=false -o /go/bin/app main.go
 
-FROM alpine:latest as runnner
+FROM alpine:2.6 as runnner
 
-COPY --from=builder /go/bin/app /go/bin/app
+COPY --from=builder /go/bin/app /app
 
-CMD ["/go/bin/app"]
+CMD ["/app"]
